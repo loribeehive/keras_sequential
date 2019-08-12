@@ -41,8 +41,7 @@ bins = np.array([50,100,150,200,250,500,1100])
 CSV_COLUMNS = ('time','IOPS','Throughput','MBps')
 
 one_hour = 12
-assign_w = 0.015
-weights = [assign_w,1,1,1,1,1,1,1]
+
 
 
 
@@ -68,36 +67,43 @@ def model_fn(input_dim,
 
   # Add a dense final layer with sigmoid function.
   model.add(layers.Dense(labels_dim, activation='softmax'))
-  compile_model(model, learning_rate)
+  # compile_model(model, learning_rate)
   return model
 
-def customLoss(yTrue, yPred):
 
-         target = yTrue
+def weighted_loss(assign_w):
 
-         # output = yPred
-         yPred /= tf.reduce_sum(yPred,
-                            reduction_indices=len(yPred.get_shape()) - 1,
-                            keep_dims=True)
-            # manual computation of crossentropy
-         epsilon = K._to_tensor(tf.keras.backend.epsilon(), yPred.dtype.base_dtype)
-         yPred = tf.clip_by_value(yPred, epsilon, 1. - epsilon)
-         yPred = tf.log(yPred)
 
-         ######apply weights here###############
-         mask = K.cast(K.expand_dims(weights, axis=-1), dtype='float32')
-         tensor_shape = yPred.get_shape()
-         # x = tf.add(x, tf.constant(1, shape=x.shape))
-         yPred_stack = []
-         for i in range(tensor_shape[1]):
-             mask_i = K.cast(K.expand_dims(mask[i], axis=-1), dtype='float32')
-             yPred_i = K.cast(K.expand_dims(yPred[:, i], axis=-1), dtype='float32')
-             yPred_stack.append(K.dot(yPred_i, mask_i))
+    def customLoss(yTrue, yPred):
 
-         output = tf.reshape(tf.stack(yPred_stack, axis=1, name='stack'), [-1, tensor_shape[1]])
+             weights = [assign_w, 1, 1, 1, 1, 1, 1, 1]
+             target = yTrue
 
-         return - tf.reduce_sum(target * output,
-                                   reduction_indices=len(output.get_shape()) - 1)
+             # output = yPred
+             yPred /= tf.reduce_sum(yPred,
+                                reduction_indices=len(yPred.get_shape()) - 1,
+                                keep_dims=True)
+                # manual computation of crossentropy
+             epsilon = K._to_tensor(tf.keras.backend.epsilon(), yPred.dtype.base_dtype)
+             yPred = tf.clip_by_value(yPred, epsilon, 1. - epsilon)
+             yPred = tf.log(yPred)
+
+             ######apply weights here###############
+             mask = K.cast(K.expand_dims(weights, axis=-1), dtype='float32')
+             tensor_shape = yPred.get_shape()
+             # x = tf.add(x, tf.constant(1, shape=x.shape))
+             yPred_stack = []
+             for i in range(tensor_shape[1]):
+                 mask_i = K.cast(K.expand_dims(mask[i], axis=-1), dtype='float32')
+                 yPred_i = K.cast(K.expand_dims(yPred[:, i], axis=-1), dtype='float32')
+                 yPred_stack.append(K.dot(yPred_i, mask_i))
+
+             output = tf.reshape(tf.stack(yPred_stack, axis=1, name='stack'), [-1, tensor_shape[1]])
+
+             return - tf.reduce_sum(target * output,
+                                       reduction_indices=len(output.get_shape()) - 1)
+
+    return customLoss
     # return - tf.reduce_sum(yTrue * tf.log(yPred))
 
 
@@ -120,14 +126,14 @@ def other_class_accuracy(y_true, y_pred):
     return class_acc
 #
 
+# assign_w=0.03
 
-
-def compile_model(model, learning_rate):
-  model.compile(
-      loss=customLoss,
-      optimizer=keras.optimizers.Adam(lr=learning_rate),
-      metrics=[first_class_accuracy,other_class_accuracy,'accuracy'])
-  return model
+# def compile_model(model, learning_rate):
+#   model.compile(
+#       loss=weighted_loss(assign_w),
+#       optimizer=keras.optimizers.Adam(lr=learning_rate),
+#       metrics=[first_class_accuracy,other_class_accuracy,'accuracy'])
+#   return model
 
 
 def to_savedmodel(model, export_path):
@@ -170,6 +176,26 @@ def generator_input(filenames, training_history, batch_size):
           for index in range(0, idx_len, batch_size):
             yield (input[index:min(idx_len, index + batch_size)],
                    label[index:min(idx_len, index + batch_size)])
+
+def generator_input_once(filenames, training_history):
+
+
+
+      files = tf.gfile.Glob(filenames)
+      for file in files:
+          file = str(file)
+          data = np.load(file)
+
+
+          input=data['input']
+          input = (input-5.036841015168413)/12.866818115879605
+
+          label = data['label']
+          return input,label
+          # idx_len = input.shape[0]
+          # for index in range(0, idx_len, batch_size):
+          #   yield (input[index:min(idx_len, index + batch_size)],
+          #          label[index:min(idx_len, index + batch_size)])
 
 
 

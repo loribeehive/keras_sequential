@@ -17,7 +17,7 @@
 import argparse
 import glob
 import os
-
+import keras
 from keras.callbacks import Callback
 from keras.callbacks import ModelCheckpoint
 from keras.callbacks import TensorBoard
@@ -89,6 +89,11 @@ def train_and_evaluate(args):
           first_model = initial_model.model_fn(INPUT_DIM, CLASS_SIZE,
                                       hidden_units, learning_rate
                                       )
+          assign_w = 0.016
+          first_model.compile(
+                    loss=initial_model.weighted_loss(assign_w),
+                    optimizer=keras.optimizers.Adam(lr=learning_rate),
+                    metrics=[initial_model.first_class_accuracy,initial_model.other_class_accuracy,'accuracy'])
           train_file_names = args.train_files + str(hours) + 'hrs/train/*npz'
           eval_file_names = args.eval_files + str(hours) + 'hrs/eval/*npz'
           print("\n\ntraining "+str(hours)+'hrs!\n\n')
@@ -116,10 +121,20 @@ def train_and_evaluate(args):
           with open(os.path.join(args.job_dir, 'weights',str(sequential_train[seq_id - 1]) + 'hrs_weights'), 'rb') as fp:
               weights_0 = pickle.load(fp)
               ######sequential(weights, CONCAT_UNIT_SIZE, INPUT_SHAPE, learning_rate)
-          seq = Sequential(weights_0,args.CONCAT_UNIT_SIZE,hours * ONE_HOUR,0.01)
+          hours = sequential_train[seq_id]
+          seq = Sequential(weights_0,args.CONCAT_UNIT_SIZE,hours * ONE_HOUR,0.004)
+          model = seq.build_sequential_model()
+          assign_w = 0.016+0.005*seq_id
+          model.compile(
+              loss=initial_model.weighted_loss(assign_w),
+              optimizer=keras.optimizers.Adam(lr=0.000001),
+              metrics=[initial_model.first_class_accuracy, initial_model.other_class_accuracy, 'accuracy'])
 
-          sequential_models.append(seq.build_sequential_model())
-
+          sequential_models.append(model)
+          # data,label = initial_model.generator_input_once('/Volumes/TOSHIBA EXT/train_input/24hrs/train/input_24hrs_8.npz', 24)
+          #
+          # scores = model.evaluate(x=data, y=label, batch_size=None, verbose=1, sample_weight=None, steps=1)
+          # print(scores)
 
           ###########sequential model#############
           train_file_names = args.train_files+str(hours)+'hrs/train/*npz'
@@ -135,10 +150,14 @@ def train_and_evaluate(args):
           weights_0=[]
           for i in range(int(len(weights)/4)):
               if i==int(len(weights)/4)-1:
-                  weights_0.extend([np.concatenate((weights[i*4], weights[i*4+2]), axis=0),
+                  weights_0.extend([np.concatenate((weights[i*4+2], weights[i*4]), axis=0),
                        (weights[i*4+1] + weights[i*4+3])])
+              elif i==int(len(weights)/4)-2:
+                  weights_0.extend([np.concatenate((weights[i * 4+2], weights[i * 4]), axis=1),
+                                    np.concatenate((weights[i * 4 + 3], weights[i * 4 + 1]))])
               else:
-                  weights_0.extend([np.concatenate((weights[i * 4], weights[i * 4 + 2]), axis=1),
+
+                  weights_0.extend([np.concatenate((weights[i * 4 ], weights[i * 4 +2]), axis=1),
                                     np.concatenate((weights[i * 4 + 1] , weights[i * 4 + 3]))])
           # weights_0 = [np.concatenate((weights[0], weights[2]), axis=1),
           #              np.concatenate((weights[1], weights[3])),
@@ -157,7 +176,7 @@ def train_and_evaluate(args):
             sequential_models[-1].save(os.path.join(args.job_dir, DISK_MODEL))
           seq_id = seq_id + 1
 
-  with open(args.job_dir+ 'histroy_all', 'wb') as fp:
+  with open(args.job_dir+ '/histroy_all', 'wb') as fp:
       pickle.dump(history_all, fp)
 
 
@@ -193,14 +212,14 @@ if __name__ == '__main__':
       default='/Users/xuerongwan/Documents/keras_job')
   parser.add_argument(
       '--sequential-train',
-      default='3,6,12',
+      default='3,6,12,24,48,96,128',
       help='number of hours of input')
   parser.add_argument(
       '--hidden_units',
       nargs='*',
       help='List of hidden units per layer. All layers are fully connected. Ex.'
            '`64 32` means first layer has 64 nodes and second one has 32.',
-      default='200,100,50',
+      default='200,40,20',
       )
   parser.add_argument(
       '--train-steps',
@@ -264,12 +283,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '--num-epochs',
       type=int,
-      default=50,
+      default=10,
       help='Maximum number of epochs on which to train')
   parser.add_argument(
       '--checkpoint-epochs',
       type=int,
-      default=10,
+      default=20,
       help='Checkpoint per n training epochs')
 
   args, _ = parser.parse_known_args()
