@@ -23,11 +23,11 @@ import pickle
 
 
 class Sequential:
-    def __init__(self, weights,CONCAT_UNIT_SIZE,INPUT_SHAPE,learning_rate):
+    def __init__(self, weights,CONCAT_UNIT_SIZE,INPUT_SHAPE,initializer):
          self.old_weights = weights
          self.CONCAT_UNIT_SIZE = CONCAT_UNIT_SIZE
          self.INPUT_SHAPE =INPUT_SHAPE
-         self.learning_rate = learning_rate
+         self.initializer = initializer
 
 
     ##############################
@@ -65,14 +65,15 @@ class Sequential:
         #########input Layer#########
         input0 = Input(shape=([self.INPUT_SHAPE]))
 
-        dense1 = Dense(padded_weights[1].shape[0], activation='relu', name='input_a',
-                       weights=[padded_weights[0], padded_weights[1]], trainable=False)(input0)
-        dense2 = Dense(self.CONCAT_UNIT_SIZE, kernel_initializer='glorot_uniform',
-                       bias_initializer='glorot_uniform', activation='relu', name='input_b')(input0)
+        dense1 = Dense(padded_weights[1].shape[0],  name='input_a',
+                       weights=[padded_weights[0], padded_weights[1]], trainable=False,activation='relu')(input0)
+        dense2 = Dense(self.CONCAT_UNIT_SIZE, kernel_initializer=self.initializer,
+                       bias_initializer=self.initializer, name='input_b',activation='relu')(input0)
         # dense2 = Dense(self.CONCAT_UNIT_SIZE, kernel_initializer='zeros',
         #                bias_initializer='zeros', activation='relu', name='input_b')(input0)
 
         merged1 = concatenate([dense2, dense1])
+        # merged1=keras.activations.relu(merged1)
         #########hidden layer#########
         hidden_layer_N =int(len(padded_weights)/2)-2
         hidden_dense = []
@@ -82,24 +83,26 @@ class Sequential:
                 #########first hidden layer connects to input#########
                 merged.append(merged1)
 
-            hidden_dense.append(Dense(padded_weights[2*(i+1)+1].shape[0], activation='relu', name='hidden_layer_'+str(i)+'_a',
+            hidden_dense.append(Dense(padded_weights[2*(i+1)+1].shape[0], name='hidden_layer_'+str(i)+'_a',activation='relu',
                        weights=[padded_weights[2*(i+1)], padded_weights[2*(i+1)+1]], trainable=False)(merged[-1]))
-            hidden_dense.append(Dense(padded_weights[2*(i+1)+1].shape[0], kernel_initializer='glorot_uniform',
-                       bias_initializer='glorot_uniform', activation='relu', name='hidden_layer_'+str(i)+'_b')(merged[-1]))
+            hidden_dense.append(Dense(padded_weights[2*(i+1)+1].shape[0], kernel_initializer=self.initializer,
+                       bias_initializer=self.initializer, activation='relu',name='hidden_layer_'+str(i)+'_b')(merged[-1]))
             # hidden_dense.append(Dense(padded_weights[2 * (i + 1) + 1].shape[0], kernel_initializer='zeros',
             #            bias_initializer='zeros', activation='relu', name='hidden_layer_'+str(i)+'_b')(merged[-1]))
 
             if i!=hidden_layer_N-1:
+
                 merged.append(concatenate([hidden_dense[-1], hidden_dense[-2]]))
         #########output Layer#########
-        output1 = Dense(padded_weights[-1].shape[0], name='output_a', weights=[padded_weights[-2], padded_weights[-1]],
+        output1 = Dense(padded_weights[-1].shape[0], name='output_a', activation='softmax',weights=[padded_weights[-2], padded_weights[-1]],
                         trainable=False)(hidden_dense[-2])
-        output2 = Dense(padded_weights[-1].shape[0], activation='softmax', kernel_initializer='zeros',
-                        bias_initializer='zeros', name='output_b')(hidden_dense[-1])
+        output2 = Dense(padded_weights[-1].shape[0], kernel_initializer=self.initializer,
+                        bias_initializer=self.initializer, activation='softmax',name='output_b')(hidden_dense[-1])
         # output2 = Dense(padded_weights[-1].shape[0], activation='softmax', kernel_initializer='zeros',
         #                 bias_initializer='zeros', name='output_b')(hidden_dense[-1])
-        out = add([output1, output2])
 
+        out = add([output1, output2])
+        # out = keras.activations.softmax(out_temp)
         model = keras.models.Model(inputs=input0, outputs=out)
         # self.compile_model(model)
         return model

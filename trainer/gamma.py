@@ -3,30 +3,42 @@ import numpy as np
 import keras
 import pickle
 
-train_data = TRAIN_DATA
-label_data = LABEL_DATA
-test_data = TEST_DATA
-test_label= TEST_LABEL
 
-evaluateAdamAlpha
-import alpha
-
-
+import trainer.alpha as alpha
+import trainer.model as initial_model
+import tensorflow as tf
 class Gamma:
-    def __init__(self, model, SEQUENCE_INDEX,history_All,Accuracy,JOBDIR):
+    def __init__(self, model,train_file_names, SEQUENCE_INDEX,history_All,Accuracy,JOBDIR):
          self.model = model
+         self.train_file_names = train_file_names
          self.sequence_id = SEQUENCE_INDEX
-         self.VERBOSE = 0
          self.history_All= history_All
-         self.BATCH_SIZE = 40000
          self.Accuracy = Accuracy
+         self.weights_path = JOBDIR + '/weights/'
+
          self.gamma_floor = 0.3
          self.percentage_start = 0.1
-         self.weights_path = JOBDIR + '/weights/'
+         self.BATCH_SIZE = 30000
+
+    def get_prediction(self):
+        files = tf.gfile.Glob(self.train_file_names)
+        for file in files:
+            file = str(file)
+            data = np.load(file)
+
+            input = data['input']
+            input = (input - 5.036841015168413) / 12.866818115879605
+            label = data['label']
+            idx_len = input.shape[0]
+            for index in range(0, idx_len, self.BATCH_SIZE):
+                 data = input[index:min(idx_len, index + self.BATCH_SIZE)]
+                 label = label[index:min(idx_len, index + self.BATCH_SIZE)]
+                 pred = self.model.predict(data, batch_size=self.BATCH_SIZE, verbose=0)
 
     def find_gamma(self):
 #################### train data input generator
-        pred = self.model.predict(train_data ,batch_size=8000 ,verbose=1)
+        # pred = self.model.predict_generator(initial_model.generator_input(self.train_file_names, self.BATCH_SIZ), steps=60)
+        # pred = self.model.predict(train_data ,batch_size=8000 ,verbose=1)
 #################### multiclass prediction
         pred_true =pred[label_data==1]
         pred_false =-1 *pred[label_data==0]

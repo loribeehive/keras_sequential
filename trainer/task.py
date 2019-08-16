@@ -28,6 +28,8 @@ import pickle
 from trainer.Sequential import Sequential
 import trainer.model as initial_model
 
+print(keras.__version__)
+
 # INPUT_SIZE = 288
 ONE_HOUR=12
 bins = np.array([50,100,150,200,250,500,1100])
@@ -74,9 +76,10 @@ def train_and_evaluate(args):
       embeddings_freq=0)
 
   callbacks = [checkpoint,tb_log]
-  sequential_train = [int(hour) for hour in args.sequential_train.split(',')]
+  sequential_train = [int(float(hour)) for hour in args.sequential_train.split(',')]
   seq_id = 0
   sequential_models=[]
+  weights_all=[]
   for hours in sequential_train:
       history_all = []
 
@@ -87,25 +90,31 @@ def train_and_evaluate(args):
 
           ###########fully connected model#############
           first_model = initial_model.model_fn(INPUT_DIM, CLASS_SIZE,
-                                      hidden_units, learning_rate
+                                      hidden_units, 0.0001
                                       )
-          assign_w = 0.016
+          assign_w = 0.03
           first_model.compile(
                     loss=initial_model.weighted_loss(assign_w),
-                    optimizer=keras.optimizers.Adam(lr=learning_rate),
-                    metrics=[initial_model.first_class_accuracy,initial_model.other_class_accuracy,'accuracy'])
-          train_file_names = args.train_files + str(hours) + 'hrs/train/*npz'
-          eval_file_names = args.eval_files + str(hours) + 'hrs/eval/*npz'
+                    optimizer=keras.optimizers.Adam(lr=0.0001),
+                    metrics = [initial_model.first_class_accuracy, initial_model.other_class_accuracy,
+               initial_model.single_class_accuracy(1), initial_model.single_class_accuracy(2),
+               initial_model.single_class_accuracy(3),
+               initial_model.single_class_accuracy(4), initial_model.single_class_accuracy(5),
+               initial_model.single_class_accuracy(6),
+               initial_model.single_class_accuracy(7), 'accuracy'])
+          train_file_names = os.path.join(args.train_files, str(hours)+'hrs', 'train', '*npz')
+          eval_file_names = os.path.join(args.eval_files, str(hours)+'hrs', 'eval', '*npz')
           print("\n\ntraining "+str(hours)+'hrs!\n\n')
           history_all.append(first_model.fit_generator(
-              initial_model.generator_input(train_file_names, hours,args.train_batch_size),
-              validation_data=initial_model.generator_input(eval_file_names, hours,args.eval_batch_size),
+              initial_model.generator_input(train_file_names, args.train_batch_size),
+              validation_data=initial_model.generator_input(eval_file_names, args.eval_batch_size),
               steps_per_epoch=args.train_steps,validation_steps = args.eval_steps,
               epochs=args.num_epochs,
               callbacks=callbacks))
 
 
           weights = first_model.get_weights()
+          weights_all.append(weights)
           with open(os.path.join(args.job_dir, 'weights',str(hours) + 'hrs_weights'), 'wb') as fp:
                   pickle.dump(weights, fp)
           DISK_MODEL = 'disk_model.hdf5'
@@ -114,7 +123,26 @@ def train_and_evaluate(args):
             copy_file_to_gcs(args.job_dir, DISK_MODEL)
           else:
             first_model.save(os.path.join(args.job_dir, DISK_MODEL))
-
+          data, label = initial_model.generator_input_once(
+              str(args.train_files) + str(hours) + 'hrs/train/input_' + str(hours) + 'hrs_8.npz', 3)
+          first_model.compile(
+              loss=initial_model.weighted_loss(0.00081),
+              optimizer=keras.optimizers.Adam(lr=0.0001),
+              metrics=[initial_model.first_class_accuracy, initial_model.other_class_accuracy,
+                       initial_model.single_class_accuracy(1), initial_model.single_class_accuracy(2),
+                       initial_model.single_class_accuracy(3),
+                       initial_model.single_class_accuracy(4), initial_model.single_class_accuracy(5),
+                       initial_model.single_class_accuracy(6),
+                       initial_model.single_class_accuracy(7), 'accuracy'])
+          first_model.fit_generator(
+              initial_model.generator_input(train_file_names, args.train_batch_size),
+              validation_data=initial_model.generator_input(eval_file_names, args.eval_batch_size),
+              steps_per_epoch=args.train_steps, validation_steps=args.eval_steps,
+              epochs=50,
+              callbacks=callbacks)
+          scores = first_model.evaluate(x=data, y=label, batch_size=None, verbose=1, sample_weight=None, steps=1)
+          print("\ntest " + str(hours) + 'hrs after train\n')
+          print(scores)
           seq_id = seq_id + 1
 
       else:
@@ -122,31 +150,42 @@ def train_and_evaluate(args):
               weights_0 = pickle.load(fp)
               ######sequential(weights, CONCAT_UNIT_SIZE, INPUT_SHAPE, learning_rate)
           hours = sequential_train[seq_id]
-          seq = Sequential(weights_0,args.CONCAT_UNIT_SIZE,hours * ONE_HOUR,0.004)
+          seq = Sequential(weights_0,args.CONCAT_UNIT_SIZE,hours * ONE_HOUR,'zeros')
           model = seq.build_sequential_model()
-          assign_w = 0.016+0.005*seq_id
+          # assign_w = 0.016+0.005*seq_id
+          assign_w=0.03
           model.compile(
               loss=initial_model.weighted_loss(assign_w),
-              optimizer=keras.optimizers.Adam(lr=0.000001),
-              metrics=[initial_model.first_class_accuracy, initial_model.other_class_accuracy, 'accuracy'])
+              optimizer=keras.optimizers.Adam(lr=0.0001),
+              metrics=[initial_model.first_class_accuracy, initial_model.other_class_accuracy,
+                       initial_model.single_class_accuracy(1),initial_model.single_class_accuracy(2),initial_model.single_class_accuracy(3),
+                       initial_model.single_class_accuracy(4),initial_model.single_class_accuracy(5),initial_model.single_class_accuracy(6),
+                       initial_model.single_class_accuracy(7),'accuracy'])
+          data, label = initial_model.generator_input_once(
+              str(args.train_files) + str(hours) + 'hrs/train/input_' + str(hours) + 'hrs_8.npz', 6)
 
-          sequential_models.append(model)
+          scores = model.evaluate(x=data, y=label, batch_size=None, verbose=1, sample_weight=None, steps=1)
+          print("\ntest " + str(hours) + 'hrs beofre train\n')
+          print(scores)
+
           # data,label = initial_model.generator_input_once('/Volumes/TOSHIBA EXT/train_input/24hrs/train/input_24hrs_8.npz', 24)
           #
           # scores = model.evaluate(x=data, y=label, batch_size=None, verbose=1, sample_weight=None, steps=1)
           # print(scores)
 
           ###########sequential model#############
-          train_file_names = args.train_files+str(hours)+'hrs/train/*npz'
-          eval_file_names = args.eval_files +str(hours) + 'hrs/eval/*npz'
+
+          train_file_names = os.path.join(str(args.train_files), str(hours)+'hrs', 'train', '*npz')
+          eval_file_names = os.path.join(args.eval_files, str(hours)+'hrs', 'eval', '*npz')
           print("\n\ntraining " + str(hours) + 'hrs!\n\n')
-          history_all.append(sequential_models[-1].fit_generator(
-              initial_model.generator_input(train_file_names, hours, args.train_batch_size),
-              validation_data=initial_model.generator_input(eval_file_names, hours, args.eval_batch_size),
+          history_all.append(model.fit_generator(
+              initial_model.generator_input(train_file_names, args.train_batch_size),
+              validation_data=initial_model.generator_input(eval_file_names,  args.eval_batch_size),
               steps_per_epoch=args.train_steps, validation_steps=args.eval_steps,
               epochs=args.num_epochs,
               callbacks=callbacks))
-          weights = sequential_models[-1].get_weights()
+          weights = model.get_weights()
+          weights_all.append(weights)
           weights_0=[]
           for i in range(int(len(weights)/4)):
               if i==int(len(weights)/4)-1:
@@ -157,7 +196,7 @@ def train_and_evaluate(args):
                                     np.concatenate((weights[i * 4 + 3], weights[i * 4 + 1]))])
               else:
 
-                  weights_0.extend([np.concatenate((weights[i * 4 ], weights[i * 4 +2]), axis=1),
+                  weights_0.extend([np.concatenate((weights[i * 4], weights[i * 4 +2]), axis=1),
                                     np.concatenate((weights[i * 4 + 1] , weights[i * 4 + 3]))])
           # weights_0 = [np.concatenate((weights[0], weights[2]), axis=1),
           #              np.concatenate((weights[1], weights[3])),
@@ -165,18 +204,23 @@ def train_and_evaluate(args):
           #              np.concatenate((weights[5], weights[7])),
           #              np.concatenate((weights[8], weights[10]), axis=0)
           #               weights[9] + weights[11]]
+          data, label = initial_model.generator_input_once(
+              str(args.train_files) + str(hours) + 'hrs/train/input_' + str(hours) + 'hrs_8.npz', 6)
 
-          with open(os.path.join(args.job_dir, 'weights',str(hours) + 'hrs_weights'), 'wb') as fp:
+          scores = model.evaluate(x=data, y=label, batch_size=None, verbose=1, sample_weight=None, steps=1)
+          print("\ntest " + str(hours) + 'hrs after train\n')
+          print(scores)
+          with open(os.path.join(str(args.job_dir), 'weights',str(hours) + 'hrs_weights'), 'wb') as fp:
               pickle.dump(weights_0, fp)
           DISK_MODEL = 'disk_model' + str(hours) + '.hdf5'
           if args.job_dir.startswith('gs://'):
-            sequential_models[-1].save(DISK_MODEL)
+            model.save(DISK_MODEL)
             copy_file_to_gcs(args.job_dir, DISK_MODEL)
           else:
-            sequential_models[-1].save(os.path.join(args.job_dir, DISK_MODEL))
+            model.save(os.path.join(args.job_dir, DISK_MODEL))
           seq_id = seq_id + 1
 
-  with open(args.job_dir+ '/histroy_all', 'wb') as fp:
+  with open(os.path.join(str(args.job_dir), 'histroy_all'), 'wb') as fp:
       pickle.dump(history_all, fp)
 
 
@@ -212,7 +256,7 @@ if __name__ == '__main__':
       default='/Users/xuerongwan/Documents/keras_job')
   parser.add_argument(
       '--sequential-train',
-      default='3,6,12,24,48,96,128',
+      default='3,6,12',
       help='number of hours of input')
   parser.add_argument(
       '--hidden_units',
@@ -283,7 +327,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '--num-epochs',
       type=int,
-      default=10,
+      default=50,
       help='Maximum number of epochs on which to train')
   parser.add_argument(
       '--checkpoint-epochs',

@@ -71,12 +71,60 @@ def model_fn(input_dim,
   return model
 
 
-def weighted_loss(assign_w):
+def customLoss(yTrue, yPred):
+    relu4 = keras.activations.relu(yPred, alpha=0.0, max_value=None, threshold=-4.1)
+    sigmoid5 = 1 / (1 + K.exp(-1 * GAMMA * (relu4)))
+
+    return -(yTrue * sigmoid5 + (1 - yTrue) * (1 - sigmoid5))
+
+
+LOSS_FUNCTION = customLoss
+
+
+def gamma_loss(assign_w,gamma):
 
 
     def customLoss(yTrue, yPred):
 
              weights = [assign_w, 1, 1, 1, 1, 1, 1, 1]
+             target = yTrue
+
+             # output = yPred
+             yPred /= tf.reduce_sum(yPred,
+                                reduction_indices=len(yPred.get_shape()) - 1,
+                                keep_dims=True)
+                # manual computation of crossentropy
+             epsilon = K._to_tensor(tf.keras.backend.epsilon(), yPred.dtype.base_dtype)
+             yPred = tf.clip_by_value(yPred, epsilon, 1. - epsilon)
+             # yPred = tf.log(yPred)
+             relu4 = keras.activations.relu(yPred, alpha=0.0, max_value=None, threshold=-4.1)
+             yPred = 1 / (1 + K.exp(-1 * gamma * (relu4)))
+             ######apply weights here###############
+             mask = K.cast(K.expand_dims(weights, axis=-1), dtype='float32')
+             tensor_shape = yPred.get_shape()
+             # x = tf.add(x, tf.constant(1, shape=x.shape))
+             yPred_stack = []
+             for i in range(tensor_shape[1]):
+                 mask_i = K.cast(K.expand_dims(mask[i], axis=-1), dtype='float32')
+                 yPred_i = K.cast(K.expand_dims(yPred[:, i], axis=-1), dtype='float32')
+                 yPred_stack.append(K.dot(yPred_i, mask_i))
+
+             output = tf.reshape(tf.stack(yPred_stack, axis=1, name='stack'), [-1, tensor_shape[1]])
+
+             return - tf.reduce_sum(target * output,
+                                       reduction_indices=len(output.get_shape()) - 1)
+
+    return customLoss
+
+
+LOSS_FUNCTION = customLoss
+
+def weighted_loss(assign_w):
+
+
+    def customLoss(yTrue, yPred):
+
+             weights = [assign_w, 2, 2, 2, 2, 2, 2, 100]
              target = yTrue
 
              # output = yPred
@@ -105,7 +153,16 @@ def weighted_loss(assign_w):
 
     return customLoss
     # return - tf.reduce_sum(yTrue * tf.log(yPred))
-
+def single_class_accuracy(interesting_class_id):
+    def fn(y_true, y_pred):
+        class_id_true = K.argmax(y_true, axis=-1)
+        class_id_preds = K.argmax(y_pred, axis=-1)
+        # Replace class_id_preds with class_id_true for recall here
+        accuracy_mask = K.cast(K.equal(class_id_preds, interesting_class_id), 'int32')
+        class_acc_tensor = K.cast(K.equal(class_id_true, class_id_preds), 'int32') * accuracy_mask
+        class_acc = K.sum(class_acc_tensor) / K.maximum(K.sum(accuracy_mask), 1)
+        return class_acc
+    return fn
 
 def first_class_accuracy(y_true, y_pred):
     class_id_true = K.argmax(y_true, axis=-1)
@@ -121,7 +178,7 @@ def other_class_accuracy(y_true, y_pred):
     class_id_preds = K.argmax(y_pred, axis=-1)
     # Replace class_id_preds with class_id_true for recall here
     class_type_mask = K.cast(K.greater(class_id_true, INTERESTING_CLASS_ID), 'int32')
-    class_acc_tensor = K.cast(K.greater(class_id_preds, INTERESTING_CLASS_ID), 'int32') * class_type_mask
+    class_acc_tensor = K.cast(K.greater_equal(class_id_preds, class_id_true), 'int32') * class_type_mask
     class_acc = K.sum(class_acc_tensor) / K.maximum(K.sum(class_type_mask), 1)
     return class_acc
 #
@@ -154,7 +211,7 @@ def to_savedmodel(model, export_path):
     builder.save()
 
 
-def generator_input(filenames, training_history, batch_size):
+def generator_input(filenames, batch_size):
   """Produce features and labels needed by keras fit_generator."""
   # if tf.gfile.IsDirectory(filenames):
   #     files = tf.gfile.ListDirectory(filenames)

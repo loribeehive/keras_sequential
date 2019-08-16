@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ef1d321-2090-42ec-8a19-baa4b3a457b2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/Sequential.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/Sequential.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer/gamma.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/gamma.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer/task.py" afterDir="false" />
     </list>
@@ -19,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer/task.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
-              <caret line="232" column="22" lean-forward="true" selection-start-line="232" selection-start-column="22" selection-end-line="232" selection-end-column="22" />
+            <state relative-caret-position="285">
+              <caret line="102" column="54" lean-forward="true" selection-start-line="102" selection-start-column="54" selection-end-line="102" selection-end-column="54" />
               <folding>
                 <element signature="e#764#779#0" expanded="true" />
               </folding>
@@ -29,43 +28,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/Cellar/python/3.7.4/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="311" selection-start-line="311" selection-end-line="311" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/eval_weights.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/Sequential.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="95" column="58" selection-start-line="95" selection-start-column="57" selection-end-line="95" selection-end-column="58" />
-              <folding>
-                <element signature="e#1#65#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/gamma.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" column="58" lean-forward="true" selection-start-line="32" selection-start-column="58" selection-end-line="32" selection-end-column="58" />
+            <state relative-caret-position="210">
+              <caret line="110" lean-forward="true" selection-start-line="103" selection-start-column="16" selection-end-line="110" />
               <folding>
                 <element signature="e#1#19#0" expanded="true" />
               </folding>
@@ -76,19 +42,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="192" column="31" lean-forward="true" selection-start-line="192" selection-start-column="31" selection-end-line="192" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/trainer/alpha.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-93">
-              <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
+            <state relative-caret-position="111">
+              <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
               <folding>
-                <element signature="e#23#41#0" expanded="true" />
+                <element signature="e#862#888#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,19 +94,19 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/preprocess.py" />
         <option value="$PROJECT_DIR$/trainer/alpha.py" />
-        <option value="$PROJECT_DIR$/trainer/gamma.py" />
-        <option value="$PROJECT_DIR$/trainer/model.py" />
         <option value="$PROJECT_DIR$/trainer/eval_weights.py" />
         <option value="$PROJECT_DIR$/trainer/Sequential.py" />
+        <option value="$PROJECT_DIR$/trainer/gamma.py" />
+        <option value="$PROJECT_DIR$/trainer/model.py" />
         <option value="$PROJECT_DIR$/trainer/task.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="-1859" />
     <option name="y" value="65" />
-    <option name="width" value="1392" />
-    <option name="height" value="877" />
+    <option name="width" value="1859" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -257,7 +214,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1859" y="65" width="1859" height="1054" extended-state="6" />
+    <frame x="-1859" y="65" width="1859" height="1054" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10718172" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -265,7 +223,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4033264" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4074844" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.43866944" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -292,47 +250,215 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>weights_0</expression-string>
+        <expression-string>first_model.compile(
+  loss=initial_model.gamma_loss(0.016, 19),
+  optimizer=keras.optimizers.Adam(lr=0.0001),
+  metrics=[initial_model.first_class_accuracy, initial_model.other_class_accuracy,
+           initial_model.single_class_accuracy(1), initial_model.single_class_accuracy(2),
+           initial_model.single_class_accuracy(3),
+           initial_model.single_class_accuracy(4), initial_model.single_class_accuracy(5),
+           initial_model.single_class_accuracy(6),
+           initial_model.single_class_accuracy(7), 'accuracy'])
+first_model.fit_generator(
+  initial_model.generator_input(train_file_names, args.train_batch_size),
+  validation_data=initial_model.generator_input(eval_file_names, args.eval_batch_size),
+  steps_per_epoch=args.train_steps, validation_steps=args.eval_steps,
+  epochs=20,
+  callbacks=callbacks)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>weights</expression-string>
+        <expression-string>first_model.compile(
+                    loss=initial_model.gamma_loss(0.016,9),
+                    optimizer=keras.optimizers.Adam(lr=0.0001),
+                    metrics = [initial_model.first_class_accuracy, initial_model.other_class_accuracy,
+               initial_model.single_class_accuracy(1), initial_model.single_class_accuracy(2),
+               initial_model.single_class_accuracy(3),
+               initial_model.single_class_accuracy(4), initial_model.single_class_accuracy(5),
+               initial_model.single_class_accuracy(6),
+               initial_model.single_class_accuracy(7), 'accuracy'])</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[2]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=0
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 10
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[0]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=0
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 99
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[4]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=0
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 98
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[3]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=0
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 95
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[6]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=0
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 5
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[12]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=6
+print(np.min(pred_all[i]),np.max(pred_all[i]),np.median(pred_all[i]))
+percent = 0.1
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>w[11]</expression-string>
+        <expression-string># pred_all=[]
+# for i in range(8):
+#     pred_i = pred[:,i]
+#     pred_true = pred_i[label[:,i]==1]
+#     pred_false = -1 *pred_i[label[:,i]==0]
+#     pred_all.append(np.concatenate([pred_true ,pred_false]))
+# for i in range(8):
+#     print(1-np.sum(label[:,i]==1)/label.shape[0])
+i=6
+percent = 0.1
+loss = np.percentile(pred_all[i],percent)
+print(loss)
+gamma = np.log(19) /(- 1 *loss)
+print(gamma)
+# # label.shape
+# # gamma
+# # pred[0,1]
+# np.percentile(pred_all[1],98)
+# pred_true=pred_i[label[:,2]==1]
+# np.amax(pred, axis=1)
+# np.sum(label[:,2]==1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
@@ -522,39 +648,12 @@ i == len(weights) / 4 - 1: weights_0.append([np.concatenate((weights[i * 4], wei
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="192" column="31" lean-forward="true" selection-start-line="192" selection-start-column="31" selection-end-line="192" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/gamma.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="58" lean-forward="true" selection-start-line="32" selection-start-column="58" selection-end-line="32" selection-end-column="58" />
-          <folding>
-            <element signature="e#1#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/eval_weights.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trainer/Sequential.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="95" column="58" selection-start-line="95" selection-start-column="57" selection-end-line="95" selection-end-column="58" />
-          <folding>
-            <element signature="e#1#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -566,10 +665,96 @@ i == len(weights) / 4 - 1: weights_0.append([np.concatenate((weights[i * 4], wei
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/Sequential.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+          <folding>
+            <element signature="e#1#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="198" selection-start-line="198" selection-end-line="198" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/util/tf_should_use.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="192" selection-start-line="192" selection-end-line="192" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/ops/variables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="3082" selection-start-line="3082" selection-end-line="3082" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/ops/state_ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/ops/gen_state_ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="290" selection-start-line="290" selection-end-line="290" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/framework/op_def_library.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="788" selection-start-line="788" selection-end-line="788" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/util/deprecation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="506" selection-start-line="506" selection-end-line="506" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.7/site-packages/tensorflow/python/framework/ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="3617" selection-start-line="3617" selection-end-line="3617" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/gamma.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="110" lean-forward="true" selection-start-line="103" selection-start-column="16" selection-end-line="110" />
+          <folding>
+            <element signature="e#1#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+          <folding>
+            <element signature="e#862#888#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trainer/task.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="447">
-          <caret line="232" column="22" lean-forward="true" selection-start-line="232" selection-start-column="22" selection-end-line="232" selection-end-column="22" />
+        <state relative-caret-position="285">
+          <caret line="102" column="54" lean-forward="true" selection-start-line="102" selection-start-column="54" selection-end-line="102" selection-end-column="54" />
           <folding>
             <element signature="e#764#779#0" expanded="true" />
           </folding>
